@@ -16,10 +16,16 @@
     </van-cell-group>
 
 <!--    路由的出口  -->
+
+    <div class="box"></div>
     <router-view/>
   </div>
 </template>
 
 <style lang="less">
-
+.box {
+  width: 200px;
+  height: 100px;
+  background-color: pink;
+}
 </style>
