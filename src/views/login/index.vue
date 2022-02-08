@@ -1,7 +1,10 @@
 <template>
   <div class="login-container">
 <!--    导航栏 -->
-    <van-nav-bar class="page-nav-bar" title="登录" />
+    <van-nav-bar class="page-nav-bar" title="登录">
+<!--      导航栏中的返回按钮 -->
+      <van-icon slot="left" name="cross" @click="$router.back()" />
+    </van-nav-bar>
 
 <!--    登录的表单 -->
     <van-form ref="loginForm" @submit="onSubmit">
@@ -113,6 +116,10 @@ export default {
         // 将获取到的token保存到本地
         window.localStorage.setItem('TOUTIAO_USER', JSON.stringify(data.data))
         this.$toast.success('登录成功')
+
+        // 登录成功， 跳转回原来页面
+        this.$router.back()
+        // this.$route.push('/my')
       } catch (err) {
         // 捕获错误
         if (err.response.status === 400) {
