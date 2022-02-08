@@ -4,6 +4,7 @@
 
 // 引入请求方法 axiox
 import request from '@/utils/request'
+// import store from '@/store'
 
 // 登录的请求
 export const login = data => {
@@ -19,5 +20,18 @@ export const sendSms = mobile => {
   return request({
     method: 'GET',
     url: `/app/v1_0/sms/codes/${mobile}`
+  })
+}
+
+/**
+ * 获取用户自己的信息
+ */
+export const getUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user'
+    // headers: {
+    //   Authorization: `Bearer ${store.state.user.token}`
+    // }
   })
 }

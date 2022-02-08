@@ -11,9 +11,9 @@
             fit="cover"
             class="avatar"
             round
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="userInfo.photo"
           />
-          <span class="name">Yellowsea</span>
+          <span class="name">{{ userInfo.name }}</span>
         </div>
         <!--        右边编辑资料 -->
         <div class="right">
@@ -23,19 +23,19 @@
       <!--      数据信息-->
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.art_count }}</span>
           <span class="text">头条</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.follow_count }}</span>
           <span class="text">关注</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.fans_count }}</span>
           <span class="text">粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{ userInfo.like_count }}</span>
           <span class="text">获赞</span>
         </div>
       </div>
@@ -74,12 +74,26 @@
 // 使用 Vuex 中方法获取数据
 import { mapState } from 'vuex'
 import { removeItem } from '@/utils/storage'
+import { getUserInfo } from '@/api/user'
+
 export default {
   name: 'MyIndex',
+  data () {
+    return {
+      userInfo: {}
+    }
+  },
   computed: {
     ...mapState(['user'])
   },
+  created () {
+    // 如果用户登录了， 则请求加载用户信息数据
+    if (this.user) {
+      this.loadUserInfo()
+    }
+  },
   methods: {
+    // 退出登录的方法
     onLogout () {
       // 退出提示 在组件中需要使用 this.$dialog 来调用弹框组件
       this.$dialog.confirm({
@@ -93,6 +107,18 @@ export default {
         })
         .catch((not) => {
         })
+    },
+
+    // 获取用户自己信息的方法
+    async loadUserInfo () {
+      try {
+        const { data } = await getUserInfo()
+        // 保存数据
+        this.userInfo = data.data
+        console.log(data.data)
+      } catch (err) {
+        this.$toast('获取数据失败， 请稍后重试')
+      }
     }
   }
 }
