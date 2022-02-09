@@ -1,5 +1,14 @@
 <template>
   <div class="article-container">
+<!--    下拉刷新时会触发 refresh 事件，在事件的回调函数中可以进行同步或异步操作 -->
+    <van-pull-refresh
+      v-model="isLoading"
+      style="min-height: 100vh;"
+      :success-text="refreshSuccessText"
+      :success-duration="1500"
+      @refresh="onRefresh">
+      <div class="box"></div>
+    </van-pull-refresh>
     <van-list
       v-model="loading"
       :error.sync="error"
@@ -8,13 +17,19 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell v-for="(article, index) in list" :key="index" :title="article.title" />
+<!--      文章内容 -->
+      <van-cell v-for="(article, index) in list" :key="index">
+<!--        使用文章组件进行封装 -->
+        <ArticleItem :article="article" />
+      </van-cell>
     </van-list>
   </div>
 </template>
 
 <script>
 import { getArticles } from '@/api/article'
+import ArticleItem from '@/components/article-item'
+
 export default {
   name: 'ArticleList',
   props: {
@@ -23,13 +38,17 @@ export default {
       required: true
     }
   },
+  // 注册文章的组件
+  components: { ArticleItem },
   data () {
     return {
       error: false, // 控制错误列表
       list: [], // 存储列表数据的数组
       loading: false, // 控制加载中 loading 状态
       finished: false, // 控制数据加载结束的状态
-      timestamp: null // 设置初始的时间戳为null
+      timestamp: null, // 设置初始的时间戳为null
+      isLoading: false, // 下拉刷新的状态, true正在刷新, false为刷新结束
+      refreshSuccessText: '' // 刷新成功提示的文本
     }
   },
   methods: {
@@ -58,6 +77,7 @@ export default {
       }, 1000)
     }
      */
+    // 获取文章列表数据的方法
     async onLoad () {
       try {
         // 1. 请求获取数据
@@ -86,11 +106,31 @@ export default {
         this.loading = false
         // console.log('请求数据失败, 稍后重试', err)
       }
+    },
+
+    // 下拉刷新执行的函数
+    async onRefresh () {
+      // 下拉刷新组件就会自己展示 loading 状态
+      const { data } = await getArticles({
+        channel_id: this.channel.id, // 频道ID
+        timestamp: Date.now(), // 为了大家方便学习，只要你传递不同的时间戳就一定给你返回不一样的数据，而且数据不为空
+        with_top: 1
+      })
+      const { results } = data.data
+      this.list.push(...results) // 使用 ... 解构赋值
+      this.isLoading = false // 关闭刷新的状态
+      this.refreshSuccessText = `更新了${results.length}条数据`
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+.article-container {
+  .box {
+    width: 100%;
+    height: 500px;
+    background-color: #fff;
+  }
+}
 </style>
