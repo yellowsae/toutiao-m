@@ -9,6 +9,9 @@ import Vant from 'vant'
 // 加载 Vant 全局样式
 import 'vant/lib/index.css'
 
+// 加载 dayjs 初始化配置
+import './utils/dayjs'
+
 // 加载全局样式
 import './styles/index.less'
 
