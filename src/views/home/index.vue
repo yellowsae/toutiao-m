@@ -32,26 +32,38 @@
         <!--    /文章列表 -->
       </van-tab>
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div slot="nav-right" class="hamburger-btn" @click="isChannelEditShow = !isChannelEditShow">
         <i class="iconfont icon-31liebiao"></i>
       </div>
     </van-tabs>
     <!--    /频道列表 -->
-
+<!--    频道编辑弹出层 -->
+    <van-popup
+      v-model="isChannelEditShow"
+      closeable
+      position="bottom"
+      close-icon-position="top-left"
+      :style="{ height: '100%' }"
+    >
+<!--      弹出层内容 -->
+      <ChannelEdit />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
 
 export default {
   name: 'HomeIndex',
-  components: { ArticleList },
+  components: { ArticleList, ChannelEdit },
   data () {
     return {
       active: 0,
-      channels: []
+      channels: [], // 导航列表
+      isChannelEditShow: false // 控制导航列表是否展示
     }
   },
   created () {
