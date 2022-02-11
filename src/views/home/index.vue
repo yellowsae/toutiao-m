@@ -42,11 +42,12 @@
       v-model="isChannelEditShow"
       closeable
       position="bottom"
+      get-container="body"
       close-icon-position="top-left"
       :style="{ height: '100%' }"
     >
-<!--      弹出层内容 -->
-      <ChannelEdit />
+<!--      弹出层内容  my-channels 传给子组件  active 传递索引值给子组件 -->
+      <ChannelEdit :myChannels="channels" :active="active" />
     </van-popup>
   </div>
 </template>
@@ -61,7 +62,7 @@ export default {
   components: { ArticleList, ChannelEdit },
   data () {
     return {
-      active: 0,
+      active: 0, // 展示当前频道的索引值
       channels: [], // 导航列表
       isChannelEditShow: false // 控制导航列表是否展示
     }
