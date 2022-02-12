@@ -37,7 +37,9 @@
       </div>
     </van-tabs>
     <!--    /频道列表 -->
-<!--    频道编辑弹出层 -->
+<!--    频道编辑弹出层
+        isChannelEditShow 是否展示弹出层
+         -->
     <van-popup
       v-model="isChannelEditShow"
       closeable
@@ -47,7 +49,10 @@
       :style="{ height: '100%' }"
     >
 <!--      弹出层内容  my-channels 传给子组件  active 传递索引值给子组件 -->
-      <ChannelEdit :myChannels="channels" :active="active" />
+      <ChannelEdit
+        :myChannels="channels"
+        @update-active="onUpdateActive"
+        :active="active" />
     </van-popup>
   </div>
 </template>
@@ -79,6 +84,15 @@ export default {
       } catch (err) {
         console.log('获取数据失败， 请稍后重试')
       }
+    },
+
+    // 子组件传递的信息， 更新频道的切换信息
+    onUpdateActive (index, isChannelEditShow = true) {
+      // console.log('home', index)
+      // 修改频道展示数据的 active
+      this.active = index
+      // 关闭弹出层
+      this.isChannelEditShow = isChannelEditShow
     }
   }
 }

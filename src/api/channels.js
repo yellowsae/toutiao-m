@@ -5,7 +5,7 @@
 // 引入请求模块
 import request from '@/utils/request'
 
-// 获取列表
+// 获取所有列表
 export const getAllChannels = () => {
   return request({
     method: 'GET',
