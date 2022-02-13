@@ -6,6 +6,7 @@ const Home = () => import('@/views/home')
 const Qa = () => import('@/views/qa')
 const Video = () => import('@/views/video')
 const My = () => import('@/views/my')
+const Search = () => import('@/views/search')
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,12 @@ const routes = [
         component: My
       }
     ]
+  },
+
+  // 搜索页面
+  {
+    path: '/search',
+    component: Search
   }
 ]
 
