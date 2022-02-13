@@ -56,8 +56,11 @@
 
 <script>
 // 引入获取全局频道列表的方法
-import { getAllChannels } from '@/api/channels'
-
+import { getAllChannels, addUserChannel, deleteChannel } from '@/api/channels'
+// 引入 Vuex 中的user，获取用户的登录状态
+import { mapState } from 'vuex'
+// 本地存储方法
+import { setTime } from '@/utils/storage'
 export default {
   name: 'ChannelEdit',
   data () {
@@ -81,6 +84,8 @@ export default {
     this.loadAllChannels()
   },
   computed: {
+    // 用户的登录状态
+    ...mapState(['user']),
     // 过滤出来的属性
     // 计算属性会观测内部依赖数据的变化 如果依赖的数据发生变化， 则计算属性会重新执行
     recommendChannels () {
@@ -110,21 +115,35 @@ export default {
     },
 
     // 点击添加属性频道属性到上边
-    onAddChannel (channel) {
+    async onAddChannel (channel) {
       // 添加数据到频道列表中
-      this.myChannels.push(channel)
+      this.myChannels.push(channel) // 频道列表数据
+      // 数据持久化处理
+      if (this.user) {
+        // 已登录， 把数据请求接口放到线上
+        try {
+          await addUserChannel({
+            id: channel.id, // 频道ID
+            seq: this.myChannels.length // 序列号, 添加频道的长度
+          })
+        } catch (err) {
+          this.$toast('获取用户频道列表失败')
+        }
+      } else {
+        // 未登录， 把数据存储到本地
+        setTime('TOUTIAO_CHANNEL', this.myChannels)
+      }
     },
 
-    // 点击我的频道 属性事件
+    // 点击我的频道 属性事件，是删除还是编辑
     onMyChannelClick (channel, index) {
+      // 判断编辑状态， 执行删除频道
+      // 思路根据在删除状态下的索引index
       if (this.isEdit) {
-        // 如果是固定频道展示，不给删除
+        // 1.如果是固定频道展示，不给删除
         if (this.fiexdChannels.includes(index)) {
           return
         }
-        // 判断编辑状态， 执行删除频道
-        // 思路根据在删除状态下的索引index
-        // 1. 如果是固定频道则不删除
         // 2. 删除频道选项
         if (index <= this.active) {
           // 让激活频道的索引 -1
@@ -132,10 +151,27 @@ export default {
         }
         // 3. 如果删除的激活频道之前的频道，则更新激活的频道项
         this.myChannels.splice(index, 1)
+
+        // 4.处理数据持久化
+        this.deleteChannel(channel.id)
       } else {
-        // 非编辑状态， 执行切换频道
+        // 4. 非编辑状态， 执行切换频道
         // 使用 $emit() 发布事件 让父组件修改数据, 传输index 点击数据的索引值
         this.$emit('update-active', index, false)
+      }
+    },
+    async deleteChannel (id) {
+      // 判断登录状态
+      if (this.user) {
+        // 已登录， 则将数据更新到线上
+        try {
+          await deleteChannel(id)
+        } catch (e) {
+          this.$toast(e)
+        }
+      } else {
+        // 未登录， 将数据更新到本地
+        setTime('TOUTIAO_CHANNEL', this.myChannels)
       }
     }
   }

@@ -61,6 +61,8 @@
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
 import ChannelEdit from './components/channel-edit'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
 
 export default {
   name: 'HomeIndex',
@@ -72,18 +74,47 @@ export default {
       isChannelEditShow: false // 控制导航列表是否展示
     }
   },
+  computed: {
+    ...mapState(['user']) // 登录的信息
+  },
   created () {
-    // 执行方法获取属性
+    // 执行方法获取频道列表
     this.loadChannels()
   },
   methods: {
+    // 执行方法获取频道列表
     async loadChannels () {
-      try {
-        const { data } = await getUserChannels()
-        this.channels = data.data.channels
-      } catch (err) {
-        console.log('获取数据失败， 请稍后重试')
+      // 定义一个数组
+      // 使用数组进行操作， 最后列表存储数据赋值的数组
+      // eslint-disable-next-line no-unused-vars
+      let channels = []
+      if (this.user) {
+        // 已登录， 获取用户频道列表
+        try {
+          const { data } = await getUserChannels()
+          channels = data.data.channels // 赋值给本地数据
+        } catch (err) {
+          this.$toast('获取列表失败，请重试')
+        }
+      } else {
+        // 未登录， 获取本地存储的列表
+        const localChannel = getItem('TOUTIAO_CHANNEL') // 获取本地数据
+        // 本地是否有数据
+        if (localChannel) {
+          // 有， 就拿来直接使用
+          channels = localChannel
+        } else {
+          // 没有，执行请求匿名接口，获取哦数据
+          try {
+            const { data } = await getUserChannels()
+            channels = data.data.channels // 赋值给本地数据
+          } catch (err) {
+            this.$toast('获取列表失败，请重试')
+          }
+        }
       }
+      // 最后赋值给 channels
+      this.channels = channels
     },
 
     // 子组件传递的信息， 更新频道的切换信息
