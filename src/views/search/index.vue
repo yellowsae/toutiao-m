@@ -37,7 +37,10 @@
     <!--    /联想建议-->
 
     <!--    搜索历史， 默认展示这个组件 -->
-    <SearchHistory v-else/>
+    <SearchHistory
+      @search="onSearch"
+      :searchHistories="searchHistories"
+      v-else/>
     <!--    /搜索历史 -->
   </div>
 </template>
@@ -51,7 +54,8 @@ export default {
   data () {
     return {
       isResultShow: false, // 处理搜索结果页面的展示
-      searchText: '' // 搜索的文本
+      searchText: '', // 搜索的文本
+      searchHistories: [] // 保存搜索的历史
     }
   },
   components: {
@@ -61,10 +65,23 @@ export default {
   },
   methods: {
     // 设置展示结果的方法
+    // 在确定搜索时候触发
     onSearch (value) {
       // 获取的输入的数据后,展示在搜索框这里, 并且把输入的数据传给搜索结果组件
-      this.searchText = value
-      this.isResultShow = true
+      this.searchText = value // 输入的内容展示到搜索框中
+
+      // 存储搜索历史记录
+      // 要求: 不要有重复的内容, 最新的排在最前面
+      const index = this.searchHistories.indexOf(value)
+      // 判断是否有重复的内容
+      if (index !== -1) {
+        // 如果有重复内容 删除数组中的数据
+        this.searchHistories.splice(index, 1)
+      }
+      // 其他情况, 将输入的数据默认加到数组的最上方
+      this.searchHistories.unshift(value)
+
+      this.isResultShow = true // 展示搜索的结果
     },
     onCancel () {
       // 取消按钮
