@@ -7,6 +7,7 @@ const Qa = () => import('@/views/qa')
 const Video = () => import('@/views/video')
 const My = () => import('@/views/my')
 const Search = () => import('@/views/search')
+const Article = () => import('@/views/article')
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,13 @@ const routes = [
   {
     path: '/search',
     component: Search
+  },
+
+  // 文章详情页面
+  {
+    path: '/article/:articleId',
+    name: 'article',
+    component: Article
   }
 ]
 
