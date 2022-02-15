@@ -49,19 +49,31 @@
 import SearchHistory from './components/search-history'
 import SearchSuggestion from './components/search-suggestion'
 import SearchResult from './components/search-result'
+// 引入本地数据存储方法
+import { getItem, setTime } from '@/utils/storage'
+
 export default {
   name: 'SearchIndex',
   data () {
     return {
       isResultShow: false, // 处理搜索结果页面的展示
       searchText: '', // 搜索的文本
-      searchHistories: [] // 保存搜索的历史
+      searchHistories: getItem('search-history') || [] // 保存搜索的历史, 优先从本地存储中获取
     }
   },
   components: {
     SearchHistory,
     SearchSuggestion,
     SearchResult
+  },
+  // 监听搜索历史记录
+  watch: {
+    searchHistories (val) {
+      // val 是一个数组, 数据时在onSearch中添加到 数组中的数据
+      // 同步到本地存储数据, 将
+      // console.log(val) // ['a', 'test', 'b', __ob__: Observer]
+      setTime('search-history', val) // 在本地存储一个搜索历史的数组
+    }
   },
   methods: {
     // 设置展示结果的方法
