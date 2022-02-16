@@ -56,9 +56,10 @@ const routes = [
 
   // 文章详情页面
   {
-    path: '/article/:articleId',
-    name: 'article',
-    component: Article
+    path: '/article/:articleId', // 设置动态路由，参数为文章的ID
+    name: 'article', // 设置路由名称
+    component: Article,
+    props: true // 开启路由传参默，然后在使用到本路由的组件中使用props接收路由传参的数据
   }
 ]
 

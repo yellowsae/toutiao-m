@@ -48,10 +48,10 @@ export default {
       list: [
         {
           title: '这是第一篇文章',
-          art_id: 123123123,
+          art_id: 12057,
           aut_id: 1,
-          aut_name: 'yellowsea',
-          ch_id: 6,
+          aut_name: '"18811179159"',
+          ch_id: 15,
           collect_count: 0,
           comm_count: 1,
           cover: {
@@ -68,9 +68,9 @@ export default {
         },
         {
           title: 'asdasdasdsad',
-          art_id: 123213,
+          art_id: 109684,
           aut_id: 0,
-          aut_name: 'Hidie',
+          aut_name: '"18811179159"',
           ch_id: 1,
           collect_count: 2,
           comm_count: 10,
@@ -90,16 +90,17 @@ export default {
           title: '9，  nikto  和Nmap 联合扫描 ： \n' +
             'Nikto 支持配合 Nmap 进行扫描 ,运行命令nmap -p80 x.x.x.x -oG - |nikto -host -\n' +
             'nmap扫描开放80端口的IP并通过oG选项对扫描结果输出并整理），然后通过管道符“|”将上述扫描结果导入至nikto进行扫描',
-          art_id: 1232544413,
+          art_id: 110483,
           aut_id: 9,
-          aut_name: 'Hidie0644',
+          aut_name: '"13552285417"',
           ch_id: 8,
           collect_count: 9,
           comm_count: 9,
           cover: {
             type: 1,
             images: [
-              'https://error404.fun/img/full-preview/1x/1.png'
+              'https://error404.fun/img/full-preview/1x/1.png',
+              'https://cdn.segmentfault.com/v-5bf531c8/global/img/squares.svg'
             ]
           },
           is_top: 0,
@@ -108,9 +109,9 @@ export default {
         },
         {
           title: '对指定目录扫描 ： nikto  -host http://hh.test.hicn.site/ -c /wp-admin  （使用-c all 可进行目录爆破，并扫描。）',
-          art_id: 1232544413,
+          art_id: 6052,
           aut_id: 9,
-          aut_name: 'Hidie0644',
+          aut_name: '"1122"',
           ch_id: 8,
           collect_count: 9,
           comm_count: 9,
