@@ -46,6 +46,7 @@
                 简写： 在组件上使用v-model
                  子组件的value为 value="article.is_followed"
                  修改 @input="article.is_followed = $event"
+                 详细参考 ： https://v3.cn.vuejs.org/guide/component-custom-events.html#%E5%A4%84%E7%90%86-v-model-%E4%BF%AE%E9%A5%B0%E7%AC%A6
 -->
 <!--          关注用户的组件 -->
           <FollowIndex
@@ -76,6 +77,31 @@
         <!-- 文章内容 -->
         <div class="article-content markdown-body" v-html="article.content"></div>
         <van-divider>正文结束</van-divider>
+        <!-- 底部区域 -->
+        <div class="article-bottom">
+          <van-button
+            class="comment-btn"
+            type="default"
+            round
+            size="small"
+          >写评论</van-button>
+          <van-icon
+            name="comment-o"
+            info="123"
+            color="#777"
+          />
+          <!--     收藏的组件 使用 v-model 双向数据绑定，和传递 articleId. 实现功能基本和上边的关注一样-->
+          <CollectIndex
+            v-model="article.is_collected"
+            :articleId="articleId"
+          />
+          <van-icon
+            color="#777"
+            name="good-job-o"
+          />
+          <van-icon name="share" color="#777777"></van-icon>
+        </div>
+        <!-- /底部区域 -->
       </div>
       <!-- /加载完成-文章详情 -->
 
@@ -96,40 +122,16 @@
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
-
-    <!-- 底部区域 -->
-    <div class="article-bottom">
-      <van-button
-        class="comment-btn"
-        type="default"
-        round
-        size="small"
-      >写评论</van-button>
-      <van-icon
-        name="comment-o"
-        info="123"
-        color="#777"
-      />
-      <van-icon
-        color="#777"
-        name="star-o"
-      />
-      <van-icon
-        color="#777"
-        name="good-job-o"
-      />
-      <van-icon name="share" color="#777777"></van-icon>
-    </div>
-    <!-- /底部区域 -->
   </div>
 </template>
 
 <script>
 import { getArticleById } from '@/api/article'
 import FollowIndex from '@/components/follow-user'
+import CollectIndex from '@/components/collect'
 export default {
   name: 'ArticleIndex',
-  components: { FollowIndex },
+  components: { FollowIndex, CollectIndex },
   props: {
     articleId: {
       type: [Number, String],
@@ -147,6 +149,7 @@ export default {
     this.getArticles()
   },
   methods: {
+    // 获取文章信息
     async getArticles () {
       try {
         const { data } = await getArticleById(this.articleId)
@@ -159,6 +162,7 @@ export default {
       }
       this.loading = false // 关闭加载中, 无论成功还是失败
     },
+    // 点击返回上个页面
     onClickLeft () {
       this.$router.back()
     }
