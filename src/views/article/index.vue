@@ -4,13 +4,14 @@
     <van-nav-bar
       class="page-nav-bar"
       left-arrow
-      title="黑马头条"
-    ></van-nav-bar>
+      @click-left="onClickLeft"
+      title="头条">
+    </van-nav-bar>
     <!-- /导航栏 -->
 
-    <div class="main-wrap">
+    <div  class="main-wrap">
       <!-- 加载中 -->
-      <div class="loading-wrap">
+      <div v-if="loading" class="loading-wrap">
         <van-loading
           color="#3296fa"
           vertical
@@ -19,9 +20,9 @@
       <!-- /加载中 -->
 
       <!-- 加载完成-文章详情 -->
-      <div class="article-detail">
+      <div v-else-if="article.title" class="article-detail">
         <!-- 文章标题 -->
-        <h1 class="article-title">这是文章标题</h1>
+        <h1 class="article-title">{{article.title}}</h1>
         <!-- /文章标题 -->
 
         <!-- 用户信息 -->
@@ -31,44 +32,67 @@
             slot="icon"
             round
             fit="cover"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="article.aut_photo"
           />
-          <div slot="title" class="user-name">黑马头条号</div>
-          <div slot="label" class="publish-date">14小时前</div>
-          <van-button
-            class="follow-btn"
-            type="info"
-            color="#3296fa"
-            round
-            size="small"
-            icon="plus"
-          >关注</van-button>
-          <!-- <van-button
-            class="follow-btn"
-            round
-            size="small"
-          >已关注</van-button> -->
+          <div slot="title" class="user-name">{{article.aut_name}}</div>
+          <div slot="label" class="publish-date">{{article.pubdate | relativeTime}}</div>
+
+<!--          $event， 模板中的$event是子组件传递过来的参数
+             知识点 ： 当我们在传给给子组件的数据 既要用，还要改时可以使用 v-model
+                默认传递时：
+                传递 ： props  ->  :is_followed="article.is_followed"
+                修改 ： 自定义事件 ->  @update_follower="article.is_followed = $event"
+
+                简写： 在组件上使用v-model
+                 子组件的value为 value="article.is_followed"
+                 修改 @input="article.is_followed = $event"
+-->
+<!--          关注用户的组件 -->
+          <FollowIndex
+            v-model="article.is_followed"
+            :user_id="article.aut_id" />
+<!--          <van-button-->
+<!--            @click="onFollow"-->
+<!--            v-if="article.is_followed"-->
+<!--            class="follow-btn"-->
+<!--            round-->
+<!--            :loading="isFollowLoading"-->
+<!--            size="small"-->
+<!--          >已关注</van-button>-->
+<!--          <van-button-->
+<!--            v-else-->
+<!--            :loading="isFollowLoading"-->
+<!--            @click="onFollow"-->
+<!--            class="follow-btn"-->
+<!--            type="info"-->
+<!--            color="#3296fa"-->
+<!--            round-->
+<!--            size="small"-->
+<!--            icon="plus"-->
+<!--          >关注</van-button>-->
         </van-cell>
         <!-- /用户信息 -->
 
         <!-- 文章内容 -->
-        <div class="article-content">这是文章内容</div>
+        <div class="article-content markdown-body" v-html="article.content"></div>
         <van-divider>正文结束</van-divider>
       </div>
       <!-- /加载完成-文章详情 -->
 
       <!-- 加载失败：404 -->
-      <div class="error-wrap">
+      <div v-else-if="errorStatus === 404" class="error-wrap">
         <van-icon name="failure" />
         <p class="text">该资源不存在或已删除！</p>
       </div>
       <!-- /加载失败：404 -->
 
       <!-- 加载失败：其它未知错误（例如网络原因或服务端异常） -->
-      <div class="error-wrap">
+      <div v-else class="error-wrap">
         <van-icon name="failure" />
         <p class="text">内容加载失败！</p>
-        <van-button class="retry-btn">点击重试</van-button>
+        <van-button
+          @click="getArticles"
+          class="retry-btn">点击重试</van-button>
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
@@ -102,9 +126,10 @@
 
 <script>
 import { getArticleById } from '@/api/article'
+import FollowIndex from '@/components/follow-user'
 export default {
   name: 'ArticleIndex',
-  components: {},
+  components: { FollowIndex },
   props: {
     articleId: {
       type: [Number, String],
@@ -112,7 +137,11 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      errorStatus: 0, // 设置失败的状态码
+      loading: true, // 加载中的loading 状态
+      article: {} // 文章详情
+    }
   },
   created () {
     this.getArticles()
@@ -121,16 +150,24 @@ export default {
     async getArticles () {
       try {
         const { data } = await getArticleById(this.articleId)
-        console.log(data)
+        this.article = data.data // 赋值
       } catch (err) {
+        if (err.response && err.response.status === 404) {
+          this.errorStatus = 404
+        }
         this.$toast('获取信息失败')
       }
+      this.loading = false // 关闭加载中, 无论成功还是失败
+    },
+    onClickLeft () {
+      this.$router.back()
     }
   }
 }
 </script>
 
 <style scoped lang="less">
+@import './github-markdown.css';
 .article-container {
   .main-wrap {
     position: fixed;
@@ -224,19 +261,19 @@ export default {
     justify-content: space-around;
     align-items: center;
     box-sizing: border-box;
-    height: 44/2px;
+    height: 44px;
     border-top: 1px solid #d8d8d8;
     background-color: #fff;
     .comment-btn {
-      width: 141/2px;
-      height: 23/2px;
+      width: 141px;
+      height: 23px;
       border: 1px solid #eeeeee;
-      font-size: 15/2px;
-      line-height: 23/2px;
+      font-size: 15px;
+      line-height: 23px;
       color: #a7a7a7;
     }
     .van-icon {
-      font-size: 20/2px;
+      font-size: 20px;
       .van-info {
         font-size: 11px;
         background-color: #e22829;
