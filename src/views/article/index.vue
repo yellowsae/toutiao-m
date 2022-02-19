@@ -90,7 +90,7 @@
           >写评论</van-button>
           <van-icon
             name="comment-o"
-            info="123"
+            :info="totalCommentCount"
             color="#777"
           />
           <!--     收藏的组件 使用 v-model 双向数据绑定，和传递 articleId. 实现功能基本和上边的关注一样-->
@@ -149,7 +149,8 @@ export default {
     return {
       errorStatus: 0, // 设置失败的状态码
       loading: true, // 加载中的loading 状态
-      article: {} // 文章详情
+      article: {}, // 文章详情
+      totalCommentCount: 5 // 文章的评论总数
     }
   },
   created () {
