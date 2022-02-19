@@ -77,6 +77,9 @@
         <!-- 文章内容 -->
         <div class="article-content markdown-body" v-html="article.content"></div>
         <van-divider>正文结束</van-divider>
+        <!-- 文章的评论列表   -->
+        <CommentList :source="article.art_id" />
+        <!-- /文章的评论列表   -->
         <!-- 底部区域 -->
         <div class="article-bottom">
           <van-button
@@ -131,9 +134,11 @@ import { getArticleById } from '@/api/article'
 import FollowIndex from '@/components/follow-user'
 import CollectIndex from '@/components/collect'
 import LikeIndex from '@/components/like-article'
+// 引入文章的评论的列表
+import CommentList from './components/comment-list'
 export default {
   name: 'ArticleIndex',
-  components: { FollowIndex, CollectIndex, LikeIndex },
+  components: { FollowIndex, CollectIndex, LikeIndex, CommentList },
   props: {
     articleId: {
       type: [Number, String],
