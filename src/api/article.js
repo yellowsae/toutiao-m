@@ -59,3 +59,28 @@ export const deleteCollect = target => {
     url: `/app/v1_0/article/collections/${target}`
   })
 }
+
+/**
+ * 对文章的点赞
+ */
+
+export const addLiking = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/likings',
+    // 参数 文章的ID
+    data: {
+      target
+    }
+  })
+}
+
+/**
+ * 取消对文章的点赞
+ */
+export const deleteLiking = target => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/likings/${target}`
+  })
+}

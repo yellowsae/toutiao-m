@@ -95,9 +95,10 @@
             v-model="article.is_collected"
             :articleId="articleId"
           />
-          <van-icon
-            color="#777"
-            name="good-job-o"
+<!--          点赞的组件， 同样跟收藏和关注功能一样的实现方法 -->
+          <LikeIndex
+          v-model="article.attitude"
+          :articleId="articleId"
           />
           <van-icon name="share" color="#777777"></van-icon>
         </div>
@@ -129,9 +130,10 @@
 import { getArticleById } from '@/api/article'
 import FollowIndex from '@/components/follow-user'
 import CollectIndex from '@/components/collect'
+import LikeIndex from '@/components/like-article'
 export default {
   name: 'ArticleIndex',
-  components: { FollowIndex, CollectIndex },
+  components: { FollowIndex, CollectIndex, LikeIndex },
   props: {
     articleId: {
       type: [Number, String],

@@ -12,10 +12,19 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
+<!--      绑定点击事件，点击跳转到文章组件 -->
       <van-cell
         v-for="(item, index) in list"
         :key="index"
-        :title="item.title" />
+        :title="item.title"
+        :to="{
+          // 根据路由名称进行跳转
+          name: 'article',
+          params: {
+            articleId: item.art_id
+          }
+        }"
+      />
     </van-list>
   </div>
 </template>
@@ -42,6 +51,7 @@ export default {
     }
   },
   methods: {
+    // 加载搜索出来的数据
     async onLoad () {
       try {
         //  发送请求
