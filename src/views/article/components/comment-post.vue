@@ -39,5 +39,13 @@ export default {
     background: #f5f7f9;
     margin-right: 15px;
   }
+  .post-btn {
+    font-size: 13px;
+    width: 80px;
+    color: #6db4fb;
+    border: none;
+    margin-bottom: 15px;
+    text-align: center;
+  }
 }
 </style>
