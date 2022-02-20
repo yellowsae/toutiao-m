@@ -13,6 +13,8 @@
       <van-button
         class="like-btn"
         :icon="comment.is_liking ? 'good-job' : 'good-job-o' "
+        :loging="commentLoading"
+        @click="onCommentLike"
       >{{ comment.like_count  ||  '赞'}}</van-button>
     </div>
 
@@ -31,6 +33,9 @@
 </template>
 
 <script>
+// 引入方法
+// import { addLiking, deleteLiking} from '@/api/article'
+
 export default {
   name: 'CommentItem',
   props: {
@@ -40,12 +45,37 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      commentLoading: false // 控制点赞的 loading
+    }
   },
   computed: {},
   created () {},
   mounted () {},
-  methods: {}
+  methods: {
+    // 点赞的方法
+    async onCommentLike () {
+      this.commentLoading = true
+      try {
+        if (this.comment.is_liking) {
+          // 已经点赞， 取消点赞
+          // await deleteLiking(this.comment.com_id)
+          // 将模拟的数据取消点赞
+          this.comment.like_count++
+          this.comment.is_liking = false
+        } else {
+          // 点赞
+          // await addLiking(this.comment.com_id) // 发送请求的数据
+          this.comment.like_count++
+          this.comment.is_liking = true
+        }
+        // 数据取反
+      } catch (err) {
+        this.$toast('操作失败')
+      }
+      this.commentLoading = true
+    }
+  }
 }
 </script>
 

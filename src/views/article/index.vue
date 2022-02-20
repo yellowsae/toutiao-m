@@ -87,6 +87,7 @@
             type="default"
             round
             size="small"
+            @click="isPostShow = true"
           >写评论</van-button>
           <van-icon
             name="comment-o"
@@ -106,6 +107,13 @@
           <van-icon name="share" color="#777777"></van-icon>
         </div>
         <!-- /底部区域 -->
+        <!--    弹出层位置    -->
+        <van-popup
+          v-model="isPostShow"
+          position="bottom">
+<!--          CommentPost 弹出层封装的组件 -->
+          <CommentPost />
+        </van-popup>
       </div>
       <!-- /加载完成-文章详情 -->
 
@@ -136,9 +144,10 @@ import CollectIndex from '@/components/collect'
 import LikeIndex from '@/components/like-article'
 // 引入文章的评论的列表
 import CommentList from './components/comment-list'
+import CommentPost from './components/comment-post'
 export default {
   name: 'ArticleIndex',
-  components: { FollowIndex, CollectIndex, LikeIndex, CommentList },
+  components: { FollowIndex, CollectIndex, LikeIndex, CommentList, CommentPost },
   props: {
     articleId: {
       type: [Number, String],
@@ -150,7 +159,8 @@ export default {
       errorStatus: 0, // 设置失败的状态码
       loading: true, // 加载中的loading 状态
       article: {}, // 文章详情
-      totalCommentCount: 5 // 文章的评论总数
+      totalCommentCount: 5, // 文章的评论总数
+      isPostShow: false // 控制评论弹出层
     }
   },
   created () {
