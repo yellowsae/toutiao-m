@@ -17,7 +17,10 @@
         </div>
         <!--        右边编辑资料 -->
         <div class="right">
-          <van-button round size="mini">编辑资料</van-button>
+          <van-button
+            to="/user/profile"
+            round
+            size="mini">编辑资料</van-button>
         </div>
       </div>
       <!--      数据信息-->

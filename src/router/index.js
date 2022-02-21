@@ -8,7 +8,7 @@ const Video = () => import('@/views/video')
 const My = () => import('@/views/my')
 const Search = () => import('@/views/search')
 const Article = () => import('@/views/article')
-
+const UserProfile = () => import('@/views/user-profile')
 Vue.use(VueRouter)
 
 const routes = [
@@ -60,6 +60,13 @@ const routes = [
     name: 'article', // 设置路由名称
     component: Article,
     props: true // 开启路由传参默，然后在使用到本路由的组件中使用props接收路由传参的数据
+  },
+
+  // 用户资料页面
+  {
+    path: '/user/profile',
+    name: 'user-profile',
+    component: UserProfile
   }
 ]
 
