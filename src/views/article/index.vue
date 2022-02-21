@@ -112,7 +112,10 @@
           v-model="isPostShow"
           position="bottom">
 <!--          CommentPost 弹出层封装的组件 -->
-          <CommentPost />
+<!--          articleId 传入文章的ID-->
+          <CommentPost
+            @post-success="onPostSuccess"
+            :target="article.art_id"/>
         </van-popup>
       </div>
       <!-- /加载完成-文章详情 -->
@@ -183,6 +186,13 @@ export default {
     // 点击返回上个页面
     onClickLeft () {
       this.$router.back()
+    },
+    // 评论组件接收的函数
+    onPostSuccess () {
+      // 关闭评论弹出层
+      this.isPostShow = false
+      // 将发布内容显示到列表顶部
+      // this.commentList.unshift(data.new_obj)
     }
   }
 }
