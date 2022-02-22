@@ -70,3 +70,36 @@ export const deleteFollower = userId => {
     url: `/app/v1_0/user/followings/${userId}`
   })
 }
+
+/**
+ * 获取用户个人资料
+ */
+export const getUserProfile = target => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user/profile'
+  })
+}
+
+/**
+ * 修改用户个人资料
+ */
+export const updateUserProfile = data => {
+  return request({
+    method: 'PATCH',
+    url: '/app/v1_0/user/profile',
+    // 参数， 改谁就传递谁的参数
+    data
+  })
+}
+
+/**
+ * 更新用户的头像
+ */
+export const updateUserPhoto = data => {
+  return request({
+    method: 'PATCH',
+    url: '/app/v1_0/user/photo',
+    data
+  })
+}
