@@ -45,16 +45,41 @@ export default {
       // 1. 将得到的参数传给后端，进行裁切
       // console.log(this.cropper.getData())
       // 2. 纯客户端的裁切 使用 getCroppedCanvas 获取裁切的文件对象
-      this.cropper.getCroppedCanvas().toBlob(async blob => {
+      this.cropper.getCroppedCanvas().toBlob(blob => {
+        // 封装为一个方法
+        this.updateUserPhoto(blob)
+      })
+    },
+    async updateUserPhoto (blob) {
+      this.$toast.loading({
+        message: '保存中...',
+        duration: 0,
+        forbidClick: true
+      })
+
+      try {
         // 如果接口要求 Content-Type 是 application/json
         // 则传递普通的 JS 对象
-        await updateUserPhoto({
-          photo: blob
-        })
-
+        // await updateUserPhoto({
+        //   photo: blob
+        // })
         // 如果接口要求 Content-Type 是  multipart/form-data
-        // 则需要传入 formData 对象
-      })
+        // 则必须要传入 FormData 对象
+        const formData = new FormData()
+        // 封装数据
+        formData.append('photo', blob)
+
+        // 发送请求
+        const { data } = await updateUserPhoto(formData) // 图片不能太大
+        // 关闭弹出层
+        this.$emit('close')
+        // 更新视图
+        this.$emit('update-photo', data.data.photo)
+        // 提示完成
+        this.$toast.success('操作成功')
+      } catch (err) {
+        this.$toast.fail('操作失败')
+      }
     }
   }
 }

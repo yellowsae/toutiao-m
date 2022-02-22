@@ -78,7 +78,9 @@
       style="height: 100%"
       v-model="isUpdatePhotoShow">
       <UpdatePhoto
+        v-if="isUpdatePhotoShow"
         @close="isUpdatePhotoShow = false"
+        @update-photo="user_profile.photo = $event"
         :img="img" />
     </van-popup>
     <!--  /编辑头像   -->
