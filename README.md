@@ -26,13 +26,13 @@ npm run build
 
 #### 首页
 
-<img src="https://gitee.com/yunhai0644/imghub/raw/master/20220222234947.png" alt="2022-02-22 23.40.32" style="zoom:50%;" />
+<img src="./images/index.png" style="zoom:25%;" />
 
 #### 文章
 
-<img src="https://gitee.com/yunhai0644/imghub/raw/master/20220222235020.png" alt="截图 2022-02-19 14.50.33" style="zoom:50%;" />
+<img src="./images/page.png" style="zoom:25%;" />
 
 #### 用户页面
 
-<img src="https://gitee.com/yunhai0644/imghub/raw/master/20220222235054.png" alt="截图 2022-02-22 23.40.25" style="zoom:50%;" />
+<img src="./images/user.png" style="zoom:25%;" />
 
