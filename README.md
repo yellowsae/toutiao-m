@@ -26,13 +26,13 @@ npm run build
 
 #### 首页
 
-<img src="./images/index.png" style="zoom:25%;" />
+![](./images/index.png)
 
 #### 文章
 
-<img src="./images/page.png" style="zoom:25%;" />
+![](./images/page.png)
 
 #### 用户页面
 
-<img src="./images/user.png" style="zoom:25%;" />
+![](./images/user.png)
 
