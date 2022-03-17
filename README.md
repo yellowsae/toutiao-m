@@ -1,8 +1,5 @@
 # toutiao-m
 
-参考：https://github.com/lipengzhou/toutiao-m
-
-
 
 ## 项目初始化
 
